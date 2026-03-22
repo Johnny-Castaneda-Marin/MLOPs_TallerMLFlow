@@ -14,7 +14,7 @@
 - [Experimentación en MLflow](#experimentación-en-mlflow)
 - [Almacenamiento de artifacts en MinIO](#almacenamiento-de-artifacts-en-minio)
 - [API de inferencia](#api-de-inferencia)
-- [👥 Colaboradores](#-colaboradores)
+- [Colaboradores](#-colaboradores)
 
 ## Arquitectura de la solución
 
