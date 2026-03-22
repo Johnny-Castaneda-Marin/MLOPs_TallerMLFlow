@@ -1,5 +1,20 @@
 # 🐧 MLOps Penguins Classification
 
+## 📑 Tabla de contenido
+
+- [Arquitectura de la solución](#arquitectura-de-la-solución)
+- [Servicios desplegados](#servicios-desplegados)
+- [Estructura del proyecto](#estructura-del-proyecto)
+- [Variables de entorno](#variables-de-entorno)
+- [Levantamiento de la solución](#levantamiento-de-la-solución)
+- [Accesos a la solución](#accesos-a-la-solución)
+- [Bases de datos utilizadas](#bases-de-datos-utilizadas)
+- [Carga y procesamiento de datos](#carga-y-procesamiento-de-datos)
+- [Modelos entrenados](#modelos-entrenados)
+- [Experimentación en MLflow](#experimentación-en-mlflow)
+- [Almacenamiento de artifacts en MinIO](#almacenamiento-de-artifacts-en-minio)
+- [API de inferencia](#api-de-inferencia)
+- [👥 Colaboradores](#-colaboradores)
 
 ## Arquitectura de la solución
 
@@ -51,6 +66,8 @@ mlops_penguins/
     ├── penguins_training_mlflow.ipynb
     └── penguins_experiment_results.csv
 ```
+---
+
 ## Variables de entorno
 
 ```bash
@@ -75,11 +92,14 @@ JUPYTER_PORT=8888
 API_PORT=8000
 
 ```
+---
+
 ## Levantamiento de la solución
 
 ```bash
 docker compose up -d --build
 ```
+---
 
 ## Accesos a la solución
 MLflow UI:
@@ -98,8 +118,9 @@ FastAPI Docs:
 ```bash
 http://localhost:8000/docs
 ```
+---
 
-# Bases de datos utilizadas
+## Bases de datos utilizadas
 1. Base de datos para metadata de MLflow
     Se usa una instancia dedicada de PostgreSQL para almacenar:
    
@@ -114,8 +135,9 @@ http://localhost:8000/docs
    
         -penguins_raw
         -penguins_processed
+---
 
-# Carga y procesamiento de datos
+## Carga y procesamiento de datos
 
 Tabla penguins_raw
 
@@ -128,6 +150,7 @@ Tabla penguins_processed
     - sin columna id
     - sin nulos
     - con variables numéricas listas para entrenamiento
+---
 
 # Modelos entrenados
 Se entrenaron mínimo tres modelos de clasificación:
@@ -135,8 +158,9 @@ Se entrenaron mínimo tres modelos de clasificación:
 - SVM
 - RandomForestClassifier
 - LogisticRegression
+---
 
-# Experimentación en MLflow
+## Experimentación en MLflow
 
 - Hiperparámetros explorados
         - SVM
@@ -165,16 +189,18 @@ con esto se registra el mejor modelo en:
 ```bash
     penguins-best-model
 ```
+---
 
-# Almacenamiento de artifacts en MinIO
+## Almacenamiento de artifacts en MinIO
 
 MLflow usa MinIO como artifact store para guardar:
 
 - Modelos entrenados
 - Artifacts de experimentación
 - Archivos asociados a los runs
+---
 
-# API de inferencia
+## API de inferencia
 - Endpoint principal:
 ```bash
 {
@@ -194,3 +220,10 @@ MLflow usa MinIO como artifact store para guardar:
   "species_name": "Adelie"
 }
 ```
+---
+
+## 👥 Colaboradores
+
+- 🧑‍💻 **Camilo Cortés** — [![GitHub](https://img.shields.io/badge/GitHub-@cccortesh95-181717?logo=github)](https://github.com/cccortesh95)
+- 🧑‍💻 **Johnny Castañeda** — [![GitHub](https://img.shields.io/badge/GitHub-@Johnny--Castaneda--Marin-181717?logo=github)](https://github.com/Johnny-Castaneda-Marin)
+
