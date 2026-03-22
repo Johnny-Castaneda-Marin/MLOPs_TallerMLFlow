@@ -135,3 +135,62 @@ Se entrenaron mínimo tres modelos de clasificación:
 - SVM
 - RandomForestClassifier
 - LogisticRegression
+
+# Experimentación en MLflow
+
+- Hiperparámetros explorados
+        - SVM
+        - C
+        - kernel
+        - gamma
+- RandomForest
+        - n_estimators
+        - max_depth
+- LogisticRegression
+        - C
+        - solver
+        - max_iter
+
+Cada ejecución registró en MLflow:
+
+- nombre del modelo
+- hiperparámetros
+- accuracy
+- precision
+- recall
+- f1_score
+- modelo entrenado como artifact
+
+con esto se registra el mejor modelo en:
+```bash
+    penguins-best-model
+```
+
+# Almacenamiento de artifacts en MinIO
+
+MLflow usa MinIO como artifact store para guardar:
+
+- Modelos entrenados
+- Artifacts de experimentación
+- Archivos asociados a los runs
+
+# API de inferencia
+- Endpoint principal:
+```bash
+{
+  "island": 1,
+  "bill_length_mm": 39.1,
+  "bill_depth_mm": 18.7,
+  "flipper_length_mm": 181,
+  "body_mass_g": 3750,
+  "sex": 1,
+  "year": 2007
+}
+```
+- Salida tipo:
+```bash
+{
+  "prediction": 0,
+  "species_name": "Adelie"
+}
+```
