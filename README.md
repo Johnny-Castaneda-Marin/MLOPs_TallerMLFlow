@@ -14,6 +14,7 @@
 - [Experimentación en MLflow](#experimentación-en-mlflow)
 - [Almacenamiento de artifacts en MinIO](#almacenamiento-de-artifacts-en-minio)
 - [API de inferencia](#api-de-inferencia)
+- [Evidencia de funcionamiento](#evidencia-de-funcionamiento)
 - [Colaboradores](#-colaboradores)
 
 ## Arquitectura de la solución
@@ -206,6 +207,12 @@ con esto se registra el mejor modelo en:
   <img src="images/mejor_jupyter.png" alt="mejor" width="600"/>
 </p>
 
+Registro del modelo desde Jupyter hacia MLflow:
+
+<p align="center">
+  <img src="images/registro_j_ml.png" alt="registro jupyter mlflow" width="600"/>
+</p>
+
 ---
 
 ## Almacenamiento de artifacts en MinIO
@@ -284,6 +291,16 @@ Cada campo tiene valores por defecto y validación de rangos. Si un valor está 
   "detail": "Model not available"
 }
 ```
+---
+
+## Evidencia de funcionamiento
+
+Captura del flujo completo en ejecución — servicios levantados, modelo registrado y API respondiendo:
+
+<p align="center">
+  <img src="images/Captura de pantalla 2026-03-21 220745.png" alt="evidencia funcionamiento" width="600"/>
+</p>
+
 ---
 
 ## 👥 Colaboradores
