@@ -29,7 +29,7 @@ La solución está compuesta por los siguientes servicios:
 
 <p align="center">
   <img src="images/Arquitectura.png" alt="arquitectura" width="1000"/>
-</p
+</p>
 ---
 
 ## Servicios desplegados
@@ -66,7 +66,7 @@ mlops_penguins/
 │   └── app.py
 └── notebooks/
     ├── penguins_v1.csv
-    ├── penguins_training_mlflow.ipynb
+    ├── penguins_load.ipynb
     └── penguins_experiment_results.csv
 ```
 ---
@@ -97,6 +97,12 @@ API_PORT=8000
 ```
 ---
 
+## Requisitos previos
+
+- [Docker](https://docs.docker.com/get-docker/) y [Docker Compose](https://docs.docker.com/compose/install/)
+
+---
+
 ## Levantamiento de la solución
 
 ```bash
@@ -104,7 +110,7 @@ docker compose up -d --build
 ```
 <p align="center">
   <img src="images/levantar_servicios.png" alt="levantar" width="600"/>
-</p
+</p>
     
 ---
 
@@ -170,17 +176,9 @@ Se entrenaron mínimo tres modelos de clasificación:
 ## Experimentación en MLflow
 
 - Hiperparámetros explorados
-        - SVM
-        - C
-        - kernel
-        - gamma
-- RandomForest
-        - n_estimators
-        - max_depth
-- LogisticRegression
-        - C
-        - solver
-        - max_iter
+    - **SVM**: `C`, `kernel`, `gamma`
+    - **RandomForest**: `n_estimators`, `max_depth`
+    - **LogisticRegression**: `C`, `solver`, `max_iter`
 
 Cada ejecución registró en MLflow:
 
@@ -194,11 +192,11 @@ Cada ejecución registró en MLflow:
 
 <p align="center">
   <img src="images/experimentos_jupyter.png" alt="mejor" width="600"/>
-</p
+</p>
     
 <p align="center">
   <img src="images/registro_en_mlflow.png" alt="experimento" width="600"/>
-</p
+</p>
 
 con esto se registra el mejor modelo en:
 ```bash
@@ -206,7 +204,7 @@ con esto se registra el mejor modelo en:
 ```
 <p align="center">
   <img src="images/mejor_jupyter.png" alt="mejor" width="600"/>
-</p
+</p>
 
 ---
 
@@ -217,16 +215,40 @@ MLflow usa MinIO como artifact store para guardar:
 - Modelos entrenados
 - Artifacts de experimentación
 - Archivos asociados a los runs
-- 
 <p align="center">
   <img src="images/registro_en_minio.png" alt="minio" width="600"/>
-</p
+</p>
 
 ---
 
 ## API de inferencia
-- Endpoint principal:
-```bash
+
+La API carga el modelo de forma lazy en cada request. Si el modelo no está disponible en MLflow, la API inicia igual y responde con HTTP 503 en `/predict`.
+
+### Endpoints
+
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| `GET` | `/health` | Estado de la API y disponibilidad del modelo |
+| `POST` | `/predict` | Predicción de especie |
+
+### Validación de entrada
+
+Cada campo tiene valores por defecto y validación de rangos. Si un valor está fuera del intervalo permitido, la API retorna HTTP 422.
+
+| Campo | Tipo | Rango | Default | Descripción |
+|-------|------|-------|---------|-------------|
+| `island` | int | 0–2 | 0 | Isla (0=Biscoe, 1=Dream, 2=Torgersen) |
+| `bill_length_mm` | float | 30.0–60.0 | 43.9 | Largo del pico en mm |
+| `bill_depth_mm` | float | 13.0–22.0 | 17.2 | Profundidad del pico en mm |
+| `flipper_length_mm` | int | 170–230 | 200 | Largo de aleta en mm |
+| `body_mass_g` | int | 2700–6300 | 4200 | Masa corporal en g |
+| `sex` | int | 0–1 | 0 | Sexo (0=hembra, 1=macho) |
+| `year` | int | 2007–2009 | 2008 | Año de observación |
+
+### Ejemplo de request
+
+```json
 {
   "island": 1,
   "bill_length_mm": 39.1,
@@ -237,20 +259,31 @@ MLflow usa MinIO como artifact store para guardar:
   "year": 2007
 }
 ```
+
 <p align="center">
   <img src="images/api_predictor.png" alt="api" width="600"/>
-</p
-    
-- Salida tipo:
-```bash
+</p>
+
+### Ejemplo de respuesta (modelo disponible)
+
+```json
 {
   "prediction": 0,
   "species_name": "Adelie"
 }
 ```
+
 <p align="center">
   <img src="images/resultado_api.png" alt="resultado" width="600"/>
-</p
+</p>
+
+### Respuesta con modelo no disponible (HTTP 503)
+
+```json
+{
+  "detail": "Model not available"
+}
+```
 ---
 
 ## 👥 Colaboradores
