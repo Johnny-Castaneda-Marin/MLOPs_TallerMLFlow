@@ -73,11 +73,6 @@ def startup_event():
     mlflow.set_tracking_uri(tracking_uri)
 
 
-@app.get("/")
-def root():
-    return {"message": "Penguins API running"}
-
-
 @app.get("/health")
 def health():
     model = try_load_model()
